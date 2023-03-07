@@ -61,6 +61,7 @@ NSString *const kFLTFirebaseFirestoreLoadBundleChannelName =
 @end
 
 static NSMutableDictionary<NSNumber *, NSString *> *_serverTimestampMap;
+static NSUInteger _registeredPluginCount = 0;
 
 @implementation FLTFirebaseFirestorePlugin {
   NSMutableDictionary<NSString *, FlutterEventChannel *> *_eventChannels;
@@ -118,6 +119,7 @@ FlutterStandardMethodCodec *_codec;
   FLTFirebaseFirestorePlugin *instance =
       [[FLTFirebaseFirestorePlugin alloc] init:[registrar messenger]];
   [registrar addMethodCallDelegate:instance channel:channel];
+  _registeredPluginCount++;
 
 #if TARGET_OS_OSX
 // TODO(Salakar): Publish does not exist on MacOS version of FlutterPluginRegistrar.
@@ -138,6 +140,11 @@ FlutterStandardMethodCodec *_codec;
 
   @synchronized(self->_transactions) {
     [self->_transactions removeAllObjects];
+  }
+
+  if (_registeredPluginCount > 0) {
+    if (completion != nil) completion();
+    return;
   }
 
   __block int instancesTerminated = 0;
@@ -165,6 +172,7 @@ FlutterStandardMethodCodec *_codec;
 }
 
 - (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
+  _registeredPluginCount--;
   [self cleanupWithCompletion:nil];
 }
 
