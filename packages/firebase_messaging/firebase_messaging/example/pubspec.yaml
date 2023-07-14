@@ -2,16 +2,19 @@ name: firebase_messaging_example
 description: Demonstrates how to use the firebase_messaging plugin.
 
 environment:
-  sdk: '>=2.16.0 <3.0.0'
-  flutter: '>=1.12.13+hotfix.5'
+  sdk: '>=2.18.0 <4.0.0'
+  flutter: '>=3.3.0'
 
 dependencies:
-  firebase_core: ^2.7.0
-  firebase_messaging: ^14.2.5
+  firebase_core: ^2.14.0
+  firebase_messaging: ^14.6.4
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^12.0.4
+  flutter_local_notifications: ^14.0.0+1
   http: ^0.13.0
+
+dev_dependencies:
+  patrol: ^2.0.7
 
 dependency_overrides:
   # Override for `flutter_local_notifications`:
@@ -19,3 +22,11 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+
+patrol:
+  android:
+    app_name: firebase_messaging_example
+    package_name: io.flutter.plugins.firebase.messaging.example
+  ios:
+    app_name: CloudMessaging
+    bundle_id: io.flutter.plugins.firebase.messaging
